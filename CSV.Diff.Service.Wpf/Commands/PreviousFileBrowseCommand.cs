@@ -36,7 +36,7 @@ public sealed class PreviousFileBrowseCommand : ICommand
             _viewModel.PreviousData = new PreviewData(content);
             if (_viewModel.PreviousData.Equals(_viewModel.AfterData))
             {
-                _viewModel.ColumnList = content.Header.ToImmutableList();
+                _viewModel.ColumnList = new ColumnList(content.Header);
             }
         }
     }
