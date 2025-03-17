@@ -7,7 +7,7 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSV.Diff.Service.Domain\CSV.Diff.Service.Domain.csproj"/>
-    <ProjectReference Include="..\CSV.Diff.Service.Infrastructure\CSV.Diff.Service.Infrastructure.csproj"/>
+    <ProjectReference Include="..\CSV.Diff.Service.Domain\CSV.Diff.Service.Domain.csproj" />
+    <ProjectReference Include="..\CSV.Diff.Service.Infrastructure\CSV.Diff.Service.Infrastructure.csproj" />
   </ItemGroup>
 </Project>
