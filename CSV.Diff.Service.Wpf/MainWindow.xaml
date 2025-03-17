@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSV.Diff.Service.Wpf"
         xmlns:vm="clr-namespace:CSV.Diff.Service.Wpf.ViewModels"
-        Icon="Icons\icon.png"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         FontSize="17"

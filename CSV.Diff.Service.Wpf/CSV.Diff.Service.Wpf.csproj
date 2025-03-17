@@ -6,6 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Icons\app.ico</ApplicationIcon>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSV.Diff.Service.Domain\CSV.Diff.Service.Domain.csproj"/>
@@ -17,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Icons\"/>
-    <Resource Include="Icons\icon.png"/>
     <Resource Include="Icons\app.ico"/>
   </ItemGroup>
 </Project>
