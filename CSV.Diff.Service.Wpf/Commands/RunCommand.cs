@@ -20,7 +20,7 @@ public sealed class RunCommand : ICommand
 
     public bool CanExecute(object? parameter)
     {
-        return _viewModel.TargetColumnList.Any() && 
+        return _viewModel.TargetColumnList.Any() &&
                 !_viewModel.IsRunning &&
                 _viewModel.TargetColumnList.Contains(_viewModel.KeyColumn);
     }
@@ -35,9 +35,9 @@ public sealed class RunCommand : ICommand
                                 _viewModel.AfterData.Raw,
                                 _viewModel.KeyColumn,
                                 _viewModel.TargetColumnList);
-            await _resultWriter.WriteAsync("Added", result.Added);
-            await _resultWriter.WriteAsync("Deleted", result.Deleted);
-            await _resultWriter.WriteAsync("Updated", result.Updated);
+            await _resultWriter.WriteAsync("Added.csv", result.Added);
+            await _resultWriter.WriteAsync("Deleted.csv", result.Deleted);
+            await _resultWriter.WriteAsync("Updated.csv", result.Updated);
             MessageBox.Show("比較が終了しました。", "情報", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
