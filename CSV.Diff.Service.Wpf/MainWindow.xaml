@@ -81,7 +81,9 @@
                   Margin="4"
                   ItemsSource="{Binding ColumnList.Value}"
                   DisplayMemberPath="Item"
+                  SelectedValuePath="Item"
                   HorizontalAlignment="Left"
+                  SelectedValue="{Binding KeyColumn}"
                   Grid.ColumnSpan="2"/>
         <TextBlock Grid.Row="5"
                    Grid.ColumnSpan="2"
@@ -137,6 +139,7 @@
                 Grid.ColumnSpan="2"
                 Content="実行"
                 Margin="4"
+                Command="{Binding RunCommand}"
                 Width="160"/>
     </Grid>
 </Window>

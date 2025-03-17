@@ -6,23 +6,23 @@ namespace CSV.Diff.Service.Domain.Logics;
 public static class DiffService
 {
     public static Task<DiffResult> RunAsync(
-        IReadOnlyCollection<IDictionary<string, string?>> prevData, 
-        IReadOnlyCollection<IDictionary<string, string?>> afterData, 
+        IReadOnlyCollection<IDictionary<string, string?>> prevData,
+        IReadOnlyCollection<IDictionary<string, string?>> afterData,
         string baseKey,
-        string[] targetColumns)
+        IEnumerable<string> targetColumns)
     {
         var tcs = new TaskCompletionSource<DiffResult>();
         //別スレッドで実施
         Task.Run(() =>
         {
             //指定されたカラムのみに絞り込む
-            var prevDict = prevData.Select(a => 
+            var prevDict = prevData.Select(a =>
                                         a.Where(kvp => targetColumns.Contains(kvp.Key)))
                                     .Select(dict => dict.ToDictionary(kvp => kvp.Key, kvp => kvp.Value))
                                     .ToList();
             var afterDict = afterData.Select(a =>
                                         a.Where(kvp => targetColumns.Contains(kvp.Key)))
-                                      .Select(dict => dict.ToDictionary(kvp => kvp.Key,kvp => kvp.Value))
+                                      .Select(dict => dict.ToDictionary(kvp => kvp.Key, kvp => kvp.Value))
                                       .ToList();
 
             // 追加されたデータ（prevDict に存在しない current のデータ）
@@ -42,6 +42,31 @@ public static class DiffService
                                        .Where(current =>
                                             prevDict.Any(prev => prev[baseKey] == current[baseKey] && !prev.SequenceEqual(current)))
                                        .ToArray();
+
+            // // prevDict と afterDict の baseKey の値を HashSet に格納
+            // var prevKeys = new HashSet<string?>(prevDict.Select(d => d.ContainsKey(baseKey) ? d[baseKey] : null));
+            // var afterKeys = new HashSet<string?>(afterDict.Select(d => d.ContainsKey(baseKey) ? d[baseKey] : null));
+
+            // // 追加されたデータ（prevDict に存在しない current のデータ）
+            // var addedData = afterDict.AsParallel()
+            //                          .Where(after => !prevKeys.Contains(after.ContainsKey(baseKey) ? after[baseKey] : null))
+            //                          .ToArray();
+
+            // // 削除されたデータ（currentDict に存在しない prev のデータ）
+            // var deletedData = prevDict.AsParallel()
+            //                           .Where(prev => !afterKeys.Contains(prev.ContainsKey(baseKey) ? prev[baseKey] : null))
+            //                           .ToArray();
+
+            // // 変更のあるデータ（ID は同じだが値が違う）
+            // var updatedData = afterDict.AsParallel()
+            //                            .Where(current =>
+            //                                    prevKeys.Contains(current.ContainsKey(baseKey) ? current[baseKey] : null) &&
+            //                                    prevDict.Any(prev =>
+            //                                       prev.ContainsKey(baseKey) &&
+            //                                       prev[baseKey] == current[baseKey] &&
+            //                                       !prev.SequenceEqual(current)))
+            //                            .ToArray();
+
 
             tcs.SetResult(new DiffResult(
                 new DiffResultContent(addedData),

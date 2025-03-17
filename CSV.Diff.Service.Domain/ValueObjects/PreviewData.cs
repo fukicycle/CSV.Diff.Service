@@ -12,17 +12,20 @@ public sealed class PreviewData : ValueObject<PreviewData>
     private PreviewData()
     {
         Content = new CSVContent(Array.Empty<string>(), Enumerable.Empty<string[]>());
+        Raw = new List<IDictionary<string, string?>>();
         Value = new DataTable();
     }
 
     public PreviewData(CSVContent content)
     {
         Content = content;
+        Raw = content.ToDictionary();
         Value = CreateDataTable(content);
     }
 
     public DataTable Value { get; }
     private CSVContent Content { get; }
+    public IReadOnlyCollection<IDictionary<string, string?>> Raw { get; }
 
     protected override bool EqualsCore(PreviewData other)
     {

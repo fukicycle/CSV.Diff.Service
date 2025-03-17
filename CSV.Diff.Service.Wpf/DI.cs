@@ -21,6 +21,7 @@ internal static class DI
             var appSettings = new AppSettings();
             services.AddSingleton(appSettings);
             services.AddSingleton<ICSVReader, CSVReader>();
+            services.AddSingleton<IResultWriter, ResultWriter>();
         }
         catch (Exception ex)
         {
