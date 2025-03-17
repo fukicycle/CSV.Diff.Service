@@ -1,5 +1,7 @@
 using System.Collections.Immutable;
+using System.Windows.Input;
 using CSV.Diff.Service.Domain.ValueObjects;
+using CSV.Diff.Service.Wpf.Commands;
 
 namespace CSV.Diff.Service.Wpf.ViewModels;
 
@@ -11,6 +13,13 @@ public sealed class MainWindowViewModel : ViewModel
     private PreviewData _afterData = PreviewData.Empty;
     private ImmutableList<string> _columnList = ImmutableList<string>.Empty;
     private ImmutableList<string> _targetColumnList = ImmutableList<string>.Empty;
+
+    public MainWindowViewModel()
+    {
+        PreviousFileBrowseCommand = new PreviousFileBrowseCommand(this);
+        AfterFileBrowseCommand = new AfterFileBrowseCommand(this);
+    }
+
     public FilePath PreviousFile
     {
         get => _previousFile;
@@ -61,4 +70,7 @@ public sealed class MainWindowViewModel : ViewModel
             SetProperty(ref _targetColumnList, value);
         }
     }
+
+    public ICommand PreviousFileBrowseCommand { get; }
+    public ICommand AfterFileBrowseCommand { get; }
 }

@@ -39,9 +39,11 @@
                     Orientation="Horizontal">
             <Button
                 Content="変更前ファイルを選択"
+                Command="{Binding PreviousFileBrowseCommand}"
                 Width="160"
                 Margin="4"/>
-            <TextBlock Text="{Binding PreviousFile.ShortName}"/>
+            <TextBlock Text="{Binding PreviousFile.ShortName}"
+                       VerticalAlignment="Center"/>
         </StackPanel>
 
         <StackPanel Grid.Row="1"
@@ -50,9 +52,11 @@
                     Orientation="Horizontal">
             <Button
                 Content="変更後ファイルを選択"
+                Command="{Binding AfterFileBrowseCommand}"
                 Width="160"
                 Margin="4"/>
-            <TextBlock Text="{Binding AfterFile.ShortName}"/>
+            <TextBlock Text="{Binding AfterFile.ShortName}"
+                       VerticalAlignment="Center"/>
         </StackPanel>
         <DataGrid Grid.Row="2"
                   Grid.Column="0"
