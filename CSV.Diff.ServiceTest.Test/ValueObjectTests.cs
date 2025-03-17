@@ -3,7 +3,7 @@ using CSV.Diff.Service.Domain.ValueObjects;
 
 namespace CSV.Diff.ServiceTest.Test;
 
-public class UnitTest1
+public class ValueObjectTests
 {
     [Test]
     public void FilePath()
