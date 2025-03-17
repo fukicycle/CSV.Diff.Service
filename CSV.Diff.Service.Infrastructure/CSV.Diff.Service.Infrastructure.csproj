@@ -5,6 +5,6 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CSV.Diff.Service.Domain\CSV.Diff.Service.Domain.csproj"/>
+    <ProjectReference Include="..\CSV.Diff.Service.Domain\CSV.Diff.Service.Domain.csproj" />
   </ItemGroup>
 </Project>
