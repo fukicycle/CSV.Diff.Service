@@ -23,7 +23,29 @@ public sealed class PreviousFileBrowseCommand : ICommand
 
     public bool CanExecute(object? parameter)
     {
-        return !_viewModel.IsRunning;;
+        if (_viewModel.IsRunning)
+        {
+            return false;
+        }
+        else
+        {
+            if (_viewModel.PreviousData.Equals(PreviewData.Empty))
+            {
+                return true;
+            }
+            if (_viewModel.PreviousData.Equals(_viewModel.AfterData))
+            {
+                return false;
+            }
+            else
+            {
+                if(_viewModel.AfterData.Equals(PreviewData.Empty))
+                {
+                    return false;
+                }
+                return true;
+            }
+        }
     }
 
     public async void Execute(object? parameter)
@@ -37,6 +59,11 @@ public sealed class PreviousFileBrowseCommand : ICommand
             if (_viewModel.PreviousData.Equals(_viewModel.AfterData))
             {
                 _viewModel.ColumnList = new ColumnList(content.Header);
+                _viewModel.StatusText = "*が表示されているパラメータを入力して実行を押してください。";
+            }
+            else
+            {
+                _viewModel.StatusText = "CSVファイルに含まれるヘッダーが一致しません。";
             }
         }
     }

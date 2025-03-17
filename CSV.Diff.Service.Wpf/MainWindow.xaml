@@ -9,8 +9,8 @@
         WindowStartupLocation="CenterScreen"
         FontSize="17"
         Title="CSV比較ツールv1"
-        Height="650"
-        Width="1200">
+        Height="850"
+        Width="1350">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
@@ -33,6 +33,7 @@
         <TextBlock Grid.Row="0"
                    Grid.ColumnSpan="2"
                    FontWeight="Bold"
+                   Margin="4 0 0 0"
                    Text="変更前のファイルと変更後のファイルを選択してください。（CSVファイル）*"/>
         <StackPanel Grid.Row="1"
                     Grid.Column="0"
@@ -76,6 +77,7 @@
         <TextBlock Grid.Row="3"
                    Grid.ColumnSpan="2"
                    FontWeight="Bold"
+                   Margin="4 0 0 0"
                    Text="比較する基準となる列を選択してください。*"/>
         <ComboBox Grid.Row="4"
                   Width="160"
@@ -85,11 +87,13 @@
                   SelectedValuePath="Item"
                   HorizontalAlignment="Left"
                   SelectedValue="{Binding KeyColumn}"
+                  IsEnabled="{Binding CanSelection}"
                   Grid.ColumnSpan="2"/>
         <TextBlock Grid.Row="5"
                    Grid.ColumnSpan="2"
                    FontWeight="Bold"
-                   Text="比較したい列を選択してください。指定しない場合すべての列が対象となります。"/>
+                   Margin="4 0 0 0"
+                   Text="比較したい列を選択してください。*"/>
         <Grid Grid.Row="6"
               Margin="4"
               Grid.ColumnSpan="2">
@@ -144,11 +148,13 @@
                 Width="160"/>
         <StatusBar Grid.Row="8"
                    Grid.ColumnSpan="2">
-            <TextBlock Text="{Binding StatusText}"/>
-            <TextBlock Width="8"/>
-            <ProgressBar IsIndeterminate="{Binding IsRunning}"
-                         Height="12"
-                         Width="240"/>
+            <StatusBarItem Content="{Binding StatusText}"/>
+            <StatusBarItem HorizontalAlignment="Right">
+                <ProgressBar IsIndeterminate="{Binding IsRunning}"
+                             Height="12"
+                             HorizontalAlignment="Right"
+                             Width="240"/>
+            </StatusBarItem>
         </StatusBar>
         <Label Grid.Row="0"
                Grid.RowSpan="8"

@@ -25,6 +25,7 @@ public sealed class AddTargetCommand : ICommand
         if (selected.Any())
         {
             _viewModel.TargetColumnList = _viewModel.TargetColumnList.AddRange(selected.Where(a => !_viewModel.TargetColumnList.Contains(a.Item)).Select(a => a.Item));
+            _viewModel.CanSelection = false;
         }
     }
 }

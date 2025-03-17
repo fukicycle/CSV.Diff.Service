@@ -17,6 +17,7 @@ public sealed class MainWindowViewModel : ViewModel
     private string _keyColumn = string.Empty;
     private bool _isRunning = false;
     private string _statusText = "*が表示されているパラメータを入力して実行を押してください。";
+    private bool _canSelection = true;
 
     public MainWindowViewModel()
     {
@@ -102,6 +103,15 @@ public sealed class MainWindowViewModel : ViewModel
         set
         {
             SetProperty(ref _statusText, value);
+        }
+    }
+
+    public bool CanSelection
+    {
+        get => _canSelection;
+        set
+        {
+            SetProperty(ref _canSelection, value);
         }
     }
 

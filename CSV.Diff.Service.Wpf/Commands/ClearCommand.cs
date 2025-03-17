@@ -21,5 +21,6 @@ public sealed class ClearCommand : ICommand
     public void Execute(object? parameter)
     {
         _viewModel.TargetColumnList = _viewModel.TargetColumnList.Clear();
+        _viewModel.CanSelection = true;
     }
 }
