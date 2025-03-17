@@ -8,13 +8,16 @@ public sealed class FilePath : ValueObject<FilePath>
     private FilePath()
     {
         Value = string.Empty;
+        ShortName = string.Empty;
     }
 
     public FilePath(string value)
     {
         if (File.Exists(value))
         {
-            Value = value;
+            var fileInfo = new FileInfo(value);
+            Value = fileInfo.FullName;
+            ShortName = fileInfo.Name;
         }
         else
         {
@@ -22,6 +25,7 @@ public sealed class FilePath : ValueObject<FilePath>
         }
     }
     public string Value { get; }
+    public string ShortName { get; }
     protected override bool EqualsCore(FilePath other)
     {
         return Value == other.Value;

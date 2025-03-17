@@ -18,8 +18,10 @@ public class ValueObjectTests
         //success case
         File.Create("TEST.txt").Dispose();
         var filePath = new FilePath("TEST.txt");
-        filePath.Value.Is("TEST.txt");
-        filePath.Value.GetHashCode().Is("TEST.txt".GetHashCode());
+        filePath.Value.Is(Path.Combine(Environment.CurrentDirectory, "TEST.txt"));
+        filePath.ShortName.Is("TEST.txt");
+        filePath.Value.GetHashCode().Is(Path.Combine(Environment.CurrentDirectory, "TEST.txt").GetHashCode());
         filePath.Equals(filePath).Is(true);
+        File.Delete("TEST.txt");
     }
 }
