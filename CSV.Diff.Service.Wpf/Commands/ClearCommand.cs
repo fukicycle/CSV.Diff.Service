@@ -15,7 +15,7 @@ public sealed class ClearCommand : ICommand
 
     public bool CanExecute(object? parameter)
     {
-        return _viewModel.TargetColumnList.Any();
+        return _viewModel.TargetColumnList.Any() && !_viewModel.IsRunning;
     }
 
     public void Execute(object? parameter)

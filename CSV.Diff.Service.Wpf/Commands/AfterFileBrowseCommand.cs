@@ -22,7 +22,7 @@ public sealed class AfterFileBrowseCommand : ICommand
 
     public bool CanExecute(object? parameter)
     {
-        return true;
+        return !_viewModel.IsRunning; ;
     }
 
     public async void Execute(object? parameter)

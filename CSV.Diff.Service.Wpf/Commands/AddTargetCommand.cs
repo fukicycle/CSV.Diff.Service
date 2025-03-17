@@ -16,7 +16,7 @@ public sealed class AddTargetCommand : ICommand
 
     public bool CanExecute(object? parameter)
     {
-        return _viewModel.ColumnList.HasValue;
+        return _viewModel.ColumnList.HasValue && !_viewModel.IsRunning;
     }
 
     public void Execute(object? parameter)

@@ -15,6 +15,7 @@ public sealed class MainWindowViewModel : ViewModel
     private ColumnList _columnList = new ColumnList(Array.Empty<string>());
     private ImmutableList<string> _targetColumnList = ImmutableList<string>.Empty;
     private string _keyColumn = string.Empty;
+    private bool _isRunning = false;
 
     public MainWindowViewModel()
     {
@@ -82,6 +83,15 @@ public sealed class MainWindowViewModel : ViewModel
         set
         {
             SetProperty(ref _keyColumn, value);
+        }
+    }
+
+    public bool IsRunning
+    {
+        get => _isRunning;
+        set
+        {
+            SetProperty(ref _isRunning, value);
         }
     }
 

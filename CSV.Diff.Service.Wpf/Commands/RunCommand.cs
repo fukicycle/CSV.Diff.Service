@@ -20,19 +20,33 @@ public sealed class RunCommand : ICommand
 
     public bool CanExecute(object? parameter)
     {
-        return _viewModel.TargetColumnList.Any();
+        return _viewModel.TargetColumnList.Any() && 
+                !_viewModel.IsRunning &&
+                _viewModel.TargetColumnList.Contains(_viewModel.KeyColumn);
     }
 
     public async void Execute(object? parameter)
     {
-        var result = await DiffService.RunAsync(
-                            _viewModel.PreviousData.Raw, 
-                            _viewModel.AfterData.Raw,
-                            _viewModel.KeyColumn,
-                            _viewModel.TargetColumnList);
-        await _resultWriter.WriteAsync("Added",result.Added);
-        await _resultWriter.WriteAsync("Deleted",result.Deleted);
-        await _resultWriter.WriteAsync("Updated", result.Updated);
-        MessageBox.Show("Success!");
+        _viewModel.IsRunning = true;
+        try
+        {
+            var result = await DiffService.RunAsync(
+                                _viewModel.PreviousData.Raw,
+                                _viewModel.AfterData.Raw,
+                                _viewModel.KeyColumn,
+                                _viewModel.TargetColumnList);
+            await _resultWriter.WriteAsync("Added", result.Added);
+            await _resultWriter.WriteAsync("Deleted", result.Deleted);
+            await _resultWriter.WriteAsync("Updated", result.Updated);
+            MessageBox.Show("比較が終了しました。", "情報", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            _viewModel.IsRunning = false;
+        }
     }
 }
