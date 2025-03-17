@@ -20,7 +20,7 @@ public class MainWindowViewModelTest
         _viewModel.AfterFile.Is(FilePath.Empty);
         _viewModel.PreviousData.Is(PreviewData.Empty);
         _viewModel.AfterData.Is(PreviewData.Empty);
-        _viewModel.ColumnList.Is(ImmutableList<string>.Empty);
+        _viewModel.ColumnList.Is(new ColumnList(Array.Empty<string>()));
         _viewModel.TargetColumnList.Is(ImmutableList<string>.Empty);
     }
 }
