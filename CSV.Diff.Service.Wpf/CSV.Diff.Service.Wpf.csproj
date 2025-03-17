@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CSV.Diff.Service.Domain\CSV.Diff.Service.Domain.csproj"/>
+    <ProjectReference Include="..\CSV.Diff.Service.Infrastructure\CSV.Diff.Service.Infrastructure.csproj"/>
+  </ItemGroup>
+</Project>
