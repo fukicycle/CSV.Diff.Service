@@ -11,13 +11,15 @@ public sealed class MainWindowViewModel : ViewModel
     private FilePath _afterFile = FilePath.Empty;
     private PreviewData _previousData = PreviewData.Empty;
     private PreviewData _afterData = PreviewData.Empty;
-    private ImmutableList<string> _columnList = ImmutableList<string>.Empty;
+    private ColumnList _columnList = new ColumnList(Array.Empty<string>());
     private ImmutableList<string> _targetColumnList = ImmutableList<string>.Empty;
 
     public MainWindowViewModel()
     {
         PreviousFileBrowseCommand = new PreviousFileBrowseCommand(this);
         AfterFileBrowseCommand = new AfterFileBrowseCommand(this);
+        AddTargetCommand = new AddTargetCommand(this);
+        ClearCommand = new ClearCommand(this);
     }
 
     public FilePath PreviousFile
@@ -54,7 +56,7 @@ public sealed class MainWindowViewModel : ViewModel
         }
     }
 
-    public ImmutableList<string> ColumnList
+    public ColumnList ColumnList
     {
         get => _columnList;
         set
@@ -73,4 +75,6 @@ public sealed class MainWindowViewModel : ViewModel
 
     public ICommand PreviousFileBrowseCommand { get; }
     public ICommand AfterFileBrowseCommand { get; }
+    public ICommand AddTargetCommand { get; }
+    public ICommand ClearCommand { get; }
 }

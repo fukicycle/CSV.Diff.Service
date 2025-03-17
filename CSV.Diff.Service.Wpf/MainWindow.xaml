@@ -79,7 +79,8 @@
         <ComboBox Grid.Row="4"
                   Width="160"
                   Margin="4"
-                  ItemsSource="{Binding ColumnList}"
+                  ItemsSource="{Binding ColumnList.Value}"
+                  DisplayMemberPath="Item"
                   HorizontalAlignment="Left"
                   Grid.ColumnSpan="2"/>
         <TextBlock Grid.Row="5"
@@ -103,16 +104,31 @@
                        Text="CSV列"/>
             <ListBox Grid.Row="1"
                      Grid.Column="0"
-                     ItemsSource="{Binding ColumnList}"
-                     SelectionMode="Extended"/>
+                     ItemsSource="{Binding ColumnList.Value}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Content="{Binding Item}"
+                                  IsChecked="{Binding IsSelected}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
             <Button Grid.Row="1"
                     Grid.Column="1"
                     VerticalAlignment="Center"
+                    Command="{Binding AddTargetCommand}"
                     Margin="4"
                     Content="&gt;"/>
-            <TextBlock Grid.Row="0"
-                       Grid.Column="2"
-                       Text="比較対象列"/>
+            <StackPanel Grid.Row="0"
+                        Grid.Column="2"
+                        Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center"
+                           Text="比較対象列"/>
+                <TextBlock Width="4"/>
+                <Button Content="クリア"
+                        Width="120"
+                        Command="{Binding ClearCommand}"
+                        VerticalAlignment="Center"/>
+            </StackPanel>
             <ListBox Grid.Row="1"
                      Grid.Column="2"
                      ItemsSource="{Binding TargetColumnList}"/>
