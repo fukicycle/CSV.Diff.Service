@@ -6,13 +6,13 @@ public sealed class CSVContent
 {
     public CSVContent(
         string[] header,
-        IEnumerable<string[]> contents)
+        IEnumerable<string?[]> contents)
     {
         Header = header;
-        var builder = ImmutableList.CreateBuilder<string[]>();
+        var builder = ImmutableList.CreateBuilder<string?[]>();
         builder.AddRange(contents);
         Contents = builder.ToImmutableList();
     }
     public string[] Header { get; }
-    public ImmutableList<string[]> Contents { get; }
+    public ImmutableList<string?[]> Contents { get; }
 }

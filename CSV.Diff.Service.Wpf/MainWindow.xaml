@@ -62,14 +62,14 @@
                   Grid.Column="0"
                   Margin="4"
                   IsReadOnly="True"
-                  ItemsSource="{Binding PreviousData}"
+                  ItemsSource="{Binding PreviousData.Value}"
                   CanUserSortColumns="False"
                   AutoGenerateColumns="True"/>
         <DataGrid Grid.Row="2"
                   Grid.Column="1"
                   Margin="4"
                   IsReadOnly="True"
-                  ItemsSource="{Binding AfterData}"
+                  ItemsSource="{Binding AfterData.Value}"
                   CanUserSortColumns="False"
                   AutoGenerateColumns="True"/>
         <TextBlock Grid.Row="3"
