@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using CSV.Diff.Service.Domain.Interfaces;
@@ -37,20 +39,27 @@ public sealed class RunCommand : ICommand
                                 _viewModel.AfterData.Raw,
                                 _viewModel.KeyColumn,
                                 _viewModel.TargetColumnList);
-            await _resultWriter.WriteAsync("Added.csv", result.Added);
-            await _resultWriter.WriteAsync("Deleted.csv", result.Deleted);
-            await _resultWriter.WriteAsync("Updated.csv", result.Updated);
+            var savePathAdd = await _resultWriter.WriteAsync("Added.csv", result.Added);
+            var savePathDelete = await _resultWriter.WriteAsync("Deleted.csv", result.Deleted);
+            var savePathUpdate = await _resultWriter.WriteAsync("Updated.csv", result.Updated);
+            var diffTime = DateTime.Now - startTime;
+            _viewModel.StatusText = $"比較が終了しました。経過時間:{diffTime.Minutes}分{diffTime.Seconds}秒";
+            MessageBox.Show("比較が終了しました。", "情報", MessageBoxButton.OK, MessageBoxImage.Information);
+            var targetDir = new FileInfo(savePathAdd.Value).Directory?.FullName;
+            var psi = new ProcessStartInfo();
+            psi.FileName = targetDir;
+            psi.UseShellExecute = true;
+            psi.WorkingDirectory = targetDir;
+            Process.Start(psi);
         }
         catch (Exception ex)
         {
+            _viewModel.StatusText = $"エラー:'{ex.Message}'";
             MessageBox.Show(ex.Message, "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {
-            var diffTime = DateTime.Now - startTime;
-            _viewModel.StatusText = $"比較が終了しました。経過時間:{diffTime.Minutes}分{diffTime.Seconds}秒";
             _viewModel.IsRunning = false;
-            MessageBox.Show("比較が終了しました。", "情報", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

@@ -1,12 +1,13 @@
 using CSV.Diff.Service.Domain.Entities;
 using CSV.Diff.Service.Domain.Helpers;
 using CSV.Diff.Service.Domain.Interfaces;
+using CSV.Diff.Service.Domain.ValueObjects;
 
 namespace CSV.Diff.Service.Infrastructure.LocalFiles;
 
 public sealed class ResultWriter : IResultWriter
 {
-    public async Task WriteAsync(string targetFileName, DiffResultContent content)
+    public async Task<FilePath> WriteAsync(string targetFileName, DiffResultContent content)
     {
         var baseDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         var targetDir = "csv-diff";
@@ -20,5 +21,6 @@ public sealed class ResultWriter : IResultWriter
         var data = content.Values.Select(a => string.Join(",", a.Keys.Select(v => v.ToCsvFormat()))).Distinct().ToList();
         data.AddRange(content.Values.Select(a => string.Join(",", a.Values.Select(v => v.ToCsvFormat()))));
         await File.WriteAllLinesAsync(writeTarget, data);
+        return new FilePath(writeTarget);
     }
 }

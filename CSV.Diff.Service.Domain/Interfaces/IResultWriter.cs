@@ -5,5 +5,5 @@ namespace CSV.Diff.Service.Domain.Interfaces;
 
 public interface IResultWriter
 {
-    Task WriteAsync(string targetFileName, DiffResultContent content);
+    Task<FilePath> WriteAsync(string targetFileName, DiffResultContent content);
 }
