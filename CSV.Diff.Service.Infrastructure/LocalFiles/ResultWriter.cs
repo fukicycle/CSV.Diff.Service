@@ -17,7 +17,7 @@ public sealed class ResultWriter : IResultWriter
             Directory.CreateDirectory(writeTargetDir);
         }
         var writeTarget = Path.Combine(writeTargetDir, targetFileName);
-        var data = content.Values.Select(a => string.Join(",", a.Keys.Select(v => v.ToCsvFormat()))).ToList();
+        var data = content.Values.Select(a => string.Join(",", a.Keys.Select(v => v.ToCsvFormat()))).Distinct().ToList();
         data.AddRange(content.Values.Select(a => string.Join(",", a.Values.Select(v => v.ToCsvFormat()))));
         await File.WriteAllLinesAsync(writeTarget, data);
     }

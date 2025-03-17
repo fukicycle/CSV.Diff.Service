@@ -16,6 +16,7 @@ public sealed class MainWindowViewModel : ViewModel
     private ImmutableList<string> _targetColumnList = ImmutableList<string>.Empty;
     private string _keyColumn = string.Empty;
     private bool _isRunning = false;
+    private string _statusText = "*が表示されているパラメータを入力して実行を押してください。";
 
     public MainWindowViewModel()
     {
@@ -92,6 +93,15 @@ public sealed class MainWindowViewModel : ViewModel
         set
         {
             SetProperty(ref _isRunning, value);
+        }
+    }
+
+    public string StatusText
+    {
+        get => _statusText;
+        set
+        {
+            SetProperty(ref _statusText, value);
         }
     }
 

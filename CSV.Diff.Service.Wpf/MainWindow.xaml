@@ -14,7 +14,7 @@
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
-    <Grid Margin="4">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -23,6 +23,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -141,5 +142,40 @@
                 Margin="4"
                 Command="{Binding RunCommand}"
                 Width="160"/>
+        <StatusBar Grid.Row="8"
+                   Grid.ColumnSpan="2">
+            <TextBlock Text="{Binding StatusText}"/>
+            <TextBlock Width="8"/>
+            <ProgressBar IsIndeterminate="{Binding IsRunning}"
+                         Height="12"
+                         Width="240"/>
+        </StatusBar>
+        <Label Grid.Row="0"
+               Grid.RowSpan="8"
+               Grid.ColumnSpan="2"
+               Background="#33333333"
+               VerticalContentAlignment="Center"
+               HorizontalContentAlignment="Center">
+            <Label.Style>
+                <Style TargetType="Label">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsRunning}"
+                                     Value="True">
+                            <Setter Property="Visibility"
+                                    Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                    <Setter Property="Visibility"
+                            Value="Collapsed"/>
+                </Style>
+            </Label.Style>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="処理中..."
+                           HorizontalAlignment="Center"
+                           FontWeight="Bold"/>
+                <ProgressBar IsIndeterminate="{Binding IsRunning}"
+                             Width="340"/>
+            </StackPanel>
+        </Label>
     </Grid>
 </Window>

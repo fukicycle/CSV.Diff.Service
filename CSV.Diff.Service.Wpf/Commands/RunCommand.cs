@@ -28,6 +28,8 @@ public sealed class RunCommand : ICommand
     public async void Execute(object? parameter)
     {
         _viewModel.IsRunning = true;
+        _viewModel.StatusText = "CSVファイルを比較しています。";
+        var startTime = DateTime.Now;
         try
         {
             var result = await DiffService.RunAsync(
@@ -38,7 +40,6 @@ public sealed class RunCommand : ICommand
             await _resultWriter.WriteAsync("Added.csv", result.Added);
             await _resultWriter.WriteAsync("Deleted.csv", result.Deleted);
             await _resultWriter.WriteAsync("Updated.csv", result.Updated);
-            MessageBox.Show("比較が終了しました。", "情報", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
@@ -46,7 +47,10 @@ public sealed class RunCommand : ICommand
         }
         finally
         {
+            var diffTime = DateTime.Now - startTime;
+            _viewModel.StatusText = $"比較が終了しました。経過時間:{diffTime.Minutes}分{diffTime.Seconds}秒";
             _viewModel.IsRunning = false;
+            MessageBox.Show("比較が終了しました。", "情報", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
