@@ -1,3 +1,4 @@
+using System.Text;
 using CSV.Diff.Service.Domain.Entities;
 using CSV.Diff.Service.Domain.Helpers;
 using CSV.Diff.Service.Domain.Interfaces;
@@ -20,7 +21,8 @@ public sealed class ResultWriter : IResultWriter
         var writeTarget = Path.Combine(writeTargetDir, targetFileName);
         var data = content.Values.Select(a => string.Join(",", a.Keys.Select(v => v.ToCsvFormat()))).Distinct().ToList();
         data.AddRange(content.Values.Select(a => string.Join(",", a.Values.Select(v => v.ToCsvFormat()))));
-        await File.WriteAllLinesAsync(writeTarget, data);
+        var provider = CodePagesEncodingProvider.Instance;
+        await File.WriteAllLinesAsync(writeTarget, data, provider.GetEncoding("shift_jis") ?? Encoding.UTF8);
         return new FilePath(writeTarget);
     }
 }
