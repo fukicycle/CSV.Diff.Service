@@ -39,9 +39,9 @@ public sealed class RunCommand : ICommand
                                 _viewModel.AfterData.Raw,
                                 _viewModel.KeyColumn,
                                 _viewModel.TargetColumnList);
-            var savePathAdd = await _resultWriter.WriteAsync("Added.csv", result.Added);
-            var savePathDelete = await _resultWriter.WriteAsync("Deleted.csv", result.Deleted);
-            var savePathUpdate = await _resultWriter.WriteAsync("Updated.csv", result.Updated);
+            var savePathAdd = await _resultWriter.WriteAsync("追加.csv", result.Added);
+            var savePathDelete = await _resultWriter.WriteAsync("削除.csv", result.Deleted);
+            var savePathUpdate = await _resultWriter.WriteAsync("更新.csv", result.Updated);
             var diffTime = DateTime.Now - startTime;
             _viewModel.StatusText = $"比較が終了しました。経過時間:{diffTime.Minutes}分{diffTime.Seconds}秒";
             MessageBox.Show("比較が終了しました。", "情報", MessageBoxButton.OK, MessageBoxImage.Information);
