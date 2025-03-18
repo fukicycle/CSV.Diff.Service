@@ -1,11 +1,21 @@
+using CSV.Diff.Service.Domain.Interfaces;
 using CSV.Diff.Service.Domain.Logics;
+using Moq;
 namespace CSV.Diff.ServiceTest.Test;
 
 public class LogicTest
 {
+    private Mock<IAppLogger> _loggerMock;
+    [SetUp]
+    public void Setup()
+    {
+        _loggerMock = new Mock<IAppLogger>();
+    }
     [Test]
     public async Task DiffServiceTest()
     {
+        var diffServiceV1 = new DiffService(_loggerMock.Object);
+        var diffServiceV2 = new DiffServiceV2(_loggerMock.Object);
         var targetColumns = new string[] { "KEY", "TEST_A", "TEST_B", "TEST_C" };
         var key = "KEY";
         var prevData = new List<IDictionary<string, string?>>();
@@ -62,10 +72,15 @@ public class LogicTest
         afterData.Add(afterOneDict);
         afterData.Add(afterThreeDict);
         afterData.Add(afterFourDict);
+        
+        var result1 = await diffServiceV1.RunAsync(prevData, afterData, key, targetColumns);
+        result1.Deleted.Values.Count.Is(1);
+        result1.Added.Values.Count.Is(1);
+        result1.Updated.Values.Count.Is(1);
 
-        var result = await DiffService.RunAsync(prevData, afterData, key, targetColumns);
-        result.Deleted.Values.Count.Is(1);
-        result.Added.Values.Count.Is(1);
-        result.Updated.Values.Count.Is(1);
+        var result2 = await diffServiceV2.RunAsync(prevData, afterData, key, targetColumns);
+        result2.Deleted.Values.Count.Is(1);
+        result2.Added.Values.Count.Is(1);
+        result2.Updated.Values.Count.Is(1);
     }
 }

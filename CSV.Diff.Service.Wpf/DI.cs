@@ -1,5 +1,6 @@
 using System.Windows;
 using CSV.Diff.Service.Domain.Interfaces;
+using CSV.Diff.Service.Domain.Logics;
 using CSV.Diff.Service.Infrastructure.LocalFiles;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,6 +25,8 @@ internal static class DI
             services.AddSingleton<IResultWriter, ResultWriter>();
             services.AddSingleton<IAppLoggerProvider, FileAppLoggerProvider>();
             services.AddSingleton<IAppLogger, FileAppLogger>();
+            services.AddSingleton<IDiffService, DiffService>();
+            // services.AddSingleton<IDiffService, DiffServiceV2>();
         }
         catch (Exception ex)
         {

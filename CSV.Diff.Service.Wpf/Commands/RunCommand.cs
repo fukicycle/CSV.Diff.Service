@@ -12,10 +12,12 @@ public sealed class RunCommand : ICommand
 {
     private readonly MainWindowViewModel _viewModel;
     private readonly IResultWriter _resultWriter;
+    private readonly IDiffService _diffService;
     public RunCommand(MainWindowViewModel viewModel)
     {
         _viewModel = viewModel;
         _resultWriter = (IResultWriter)DI.Provider.GetService(typeof(IResultWriter))!;
+        _diffService = (IDiffService)DI.Provider.GetService(typeof(IDiffService))!;
         _viewModel.PropertyChanged += (s, e) => CanExecuteChanged?.Invoke(this, e);
     }
     public event EventHandler? CanExecuteChanged;
@@ -34,7 +36,7 @@ public sealed class RunCommand : ICommand
         var startTime = DateTime.Now;
         try
         {
-            var result = await DiffService.RunAsync(
+            var result = await _diffService.RunAsync(
                                 _viewModel.PreviousData.Raw,
                                 _viewModel.AfterData.Raw,
                                 _viewModel.KeyColumn,
