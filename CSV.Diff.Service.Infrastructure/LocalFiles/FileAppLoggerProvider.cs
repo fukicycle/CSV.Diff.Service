@@ -12,9 +12,8 @@ public sealed class FileAppLoggerProvider : IAppLoggerProvider
         {
             try
             {
-                using var file = new FileStream(LOGGING_PATH, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Write);
-                using var writer = new StreamWriter(file, Encoding.UTF8);
-                writer.WriteLine(message);
+                var messageWithNewLine = message + Environment.NewLine;
+                File.AppendAllText(LOGGING_PATH, messageWithNewLine);
                 canSuccess = true;
             }
             catch (Exception)
