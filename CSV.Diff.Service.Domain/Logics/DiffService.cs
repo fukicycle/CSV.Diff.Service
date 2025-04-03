@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using CSV.Diff.Service.Domain.Entities;
+using CSV.Diff.Service.Domain.Helpers;
 using CSV.Diff.Service.Domain.Interfaces;
 
 namespace CSV.Diff.Service.Domain.Logics;
@@ -53,7 +54,7 @@ public sealed class DiffService : IDiffService
             // 変更のあるデータ（ID は同じだが値が違う）
             var updatedData = afterDict.AsParallel()
                                        .Where(current =>
-                                            prevDict.Any(prev => prev[baseKey] == current[baseKey] && !prev.SequenceEqual(current)))
+                                            prevDict.Any(prev => prev[baseKey] == current[baseKey] && !prev.EqualAllProperty(current, current[baseKey], _logger)))
                                        .ToArray();
             _logger.LogInformation($"更新されたデータを検索しました。件数:{updatedData.Length}");
 
