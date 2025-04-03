@@ -13,7 +13,7 @@ public sealed class FileAppLoggerProvider : IAppLoggerProvider
             try
             {
                 var messageWithNewLine = message + Environment.NewLine;
-                File.AppendAllText(LOGGING_PATH, messageWithNewLine);
+                File.AppendAllText(LOGGING_PATH, messageWithNewLine, Encoding.UTF8);
                 canSuccess = true;
             }
             catch (Exception)
