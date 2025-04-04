@@ -20,6 +20,8 @@ public sealed class DiffService : IDiffService
         IEnumerable<string> targetColumns)
     {
         var tcs = new TaskCompletionSource<DiffResult>();
+        _logger.LogWarning("DiffService is not available. You have to use DiffServiceV2");
+        tcs.SetException(new Exception("DiffService is not available. You have to use DiffServiceV2"));
         //別スレッドで実施
         Task.Run(() =>
         {
@@ -58,10 +60,11 @@ public sealed class DiffService : IDiffService
                                        .ToArray();
             _logger.LogInformation($"更新されたデータを検索しました。件数:{updatedData.Length}");
 
-            tcs.SetResult(new DiffResult(
-                new DiffResultContent(addedData),
-                new DiffResultContent(deletedData),
-                new DiffResultContent(updatedData)));
+            // tcs.SetResult(new DiffResult(
+            //     targetColumns.ToArray(),
+            //     addedData,
+            //     deletedData,
+            //     updatedData));
         });
         return tcs.Task;
     }

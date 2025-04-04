@@ -81,4 +81,9 @@ public static class Extensions
         }
         return result;
     }
+
+    public static List<T> GetCalculateRange<T>(this IEnumerable<T> originals, int index, int numberOfSubList)
+    {
+        return originals.ToList().Skip(index * numberOfSubList).Take(numberOfSubList).ToList();
+    }
 }

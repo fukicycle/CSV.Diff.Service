@@ -11,9 +11,6 @@
         Title="CSV比較ツールv1"
         Height="850"
         Width="1350">
-    <Window.DataContext>
-        <vm:ResultWindowViewModel/>
-    </Window.DataContext>
     <Grid Margin="4">
         <TabControl Grid.Column="0">
             <TabItem Header="追加されたもの">
@@ -24,15 +21,31 @@
                     </Grid.RowDefinitions>
                     <DataGrid Grid.Row="0"
                               IsReadOnly="True"
-                              AutoGenerateColumns="True"/>
-                    <StackPanel Margin="4"
-                                Grid.Row="1"
-                                Orientation="Horizontal"
-                                HorizontalAlignment="Center">
-                        <Button Content="&lt;"/>
-                        <TextBlock Width="16"/>
-                        <Button Content="&gt;"/>
-                    </StackPanel>
+                              AutoGenerateColumns="False"
+                              ItemsSource="{Binding Added}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="基準となる列の値"
+                                                Binding="{Binding BaseValue}"/>
+                            <DataGridTextColumn Header="生値"
+                                                Binding="{Binding RawContent}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Grid Margin="4"
+                          Grid.Row="1">
+                        <StackPanel
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                            <Button Content="&lt;"
+                                    Command="{Binding PrevCommand}"
+                                    CommandParameter="1"/>
+                            <TextBlock Width="16"/>
+                            <Button Content="&gt;"
+                                    Command="{Binding NextCommand}"
+                                    CommandParameter="1"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding AddStatusText.Value}"
+                                   HorizontalAlignment="Right"/>
+                    </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="更新されたもの">
@@ -42,28 +55,55 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
-                        <ColumnDefinition Width="280"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <DataGrid Grid.Row="0"
+                              Grid.Column="0"
                               IsReadOnly="True"
-                              AutoGenerateColumns="True"/>
-                    <StackPanel Margin="4"
-                                Grid.Row="1"
-                                Orientation="Horizontal"
-                                HorizontalAlignment="Center">
-                        <Button Content="&lt;"/>
-                        <TextBlock Width="16"/>
-                        <Button Content="&gt;"/>
-                    </StackPanel>
-                    <DataGrid Grid.Column="1"
+                              AutoGenerateColumns="False"
+                              SelectedItem="{Binding SelectedResultContent}"
+                              ItemsSource="{Binding Updated}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="基準となる列の値"
+                                                Binding="{Binding BaseValue}"/>
+                            <DataGridTextColumn Header="生値"
+                                                Binding="{Binding RawContent}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <GridSplitter Grid.Column="1"
+                                  HorizontalAlignment="Stretch"/>
+                    <Grid Grid.Row="1"
+                          Grid.Column="0"
+                          Margin="4">
+                        <StackPanel
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                            <Button Content="&lt;"
+                                    Command="{Binding PrevCommand}"
+                                    CommandParameter="2"/>
+                            <TextBlock Width="16"/>
+                            <Button Content="&gt;"
+                                    Command="{Binding NextCommand}"
+                                    CommandParameter="2"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding UpdateStatusText.Value}"
+                                   HorizontalAlignment="Right"/>
+                    </Grid>
+                    <DataGrid Grid.Column="2"
                               Grid.Row="0"
                               Grid.RowSpan="2"
-                              IsReadOnly="True">
+                              IsReadOnly="True"
+                              AutoGenerateColumns="False"
+                              ItemsSource="{Binding Changes}">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="カラム名"/>
-                            <DataGridTextColumn Header="変更前"/>
-                            <DataGridTextColumn Header="変更後"/>
+                            <DataGridTextColumn Header="カラム名"
+                                                Binding="{Binding Column}"/>
+                            <DataGridTextColumn Header="変更前"
+                                                Binding="{Binding Prev}"/>
+                            <DataGridTextColumn Header="変更後"
+                                                Binding="{Binding After}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -76,15 +116,31 @@
                     </Grid.RowDefinitions>
                     <DataGrid Grid.Row="0"
                               IsReadOnly="True"
-                              AutoGenerateColumns="True"/>
-                    <StackPanel Margin="4"
-                                Grid.Row="1"
-                                Orientation="Horizontal"
-                                HorizontalAlignment="Center">
-                        <Button Content="&lt;"/>
-                        <TextBlock Width="16"/>
-                        <Button Content="&gt;"/>
-                    </StackPanel>
+                              AutoGenerateColumns="False"
+                              ItemsSource="{Binding Deleted}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="基準となる列の値"
+                                                Binding="{Binding BaseValue}"/>
+                            <DataGridTextColumn Header="生値"
+                                                Binding="{Binding RawContent}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Grid Margin="4"
+                          Grid.Row="1">
+                        <StackPanel
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                            <Button Content="&lt;"
+                                    Command="{Binding PrevCommand}"
+                                    CommandParameter="3"/>
+                            <TextBlock Width="16"/>
+                            <Button Content="&gt;"
+                                    Command="{Binding NextCommand}"
+                                    CommandParameter="3"/>
+                        </StackPanel>
+                        <TextBlock Text="{Binding DeleteStatusText.Value}"
+                                   HorizontalAlignment="Right"/>
+                    </Grid>
                 </Grid>
             </TabItem>
         </TabControl>

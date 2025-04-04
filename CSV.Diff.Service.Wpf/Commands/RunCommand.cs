@@ -1,5 +1,3 @@
-using System.Diagnostics;
-using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using CSV.Diff.Service.Domain.Interfaces;
@@ -11,14 +9,18 @@ namespace CSV.Diff.Service.Wpf.Commands;
 public sealed class RunCommand : ICommand
 {
     private readonly MainWindowViewModel _viewModel;
-    private readonly IResultWriter _resultWriter;
+    private readonly ResultWindowViewModel _resultWindowViewModel;
+    // private readonly IResultWriter _resultWriter;
     private readonly IDiffService _diffService;
+    private readonly IAppLogger _logger;
     public RunCommand(MainWindowViewModel viewModel)
     {
         _viewModel = viewModel;
-        _resultWriter = (IResultWriter)DI.Provider.GetService(typeof(IResultWriter))!;
+        _resultWindowViewModel = (ResultWindowViewModel)DI.Provider.GetService(typeof(ResultWindowViewModel))!; ;
+        // _resultWriter = (IResultWriter)DI.Provider.GetService(typeof(IResultWriter))!;
         _diffService = (IDiffService)DI.Provider.GetService(typeof(IDiffService))!;
         _viewModel.PropertyChanged += (s, e) => CanExecuteChanged?.Invoke(this, e);
+        _logger = (IAppLogger)DI.Provider.GetService(typeof(IAppLogger))!;
     }
     public event EventHandler? CanExecuteChanged;
 
@@ -41,21 +43,30 @@ public sealed class RunCommand : ICommand
                                 _viewModel.AfterData.Raw,
                                 _viewModel.KeyColumn,
                                 _viewModel.TargetColumnList);
-            var savePathAdd = await _resultWriter.WriteAsync("追加.csv", result.Added);
-            var savePathDelete = await _resultWriter.WriteAsync("削除.csv", result.Deleted);
-            var savePathUpdate = await _resultWriter.WriteAsync("更新.csv", result.Updated);
+            _resultWindowViewModel.AddedRow = result.Added;
+            _resultWindowViewModel.UpdatedRow = result.Updated;
+            _resultWindowViewModel.DeletedRow = result.Deleted;
+            _resultWindowViewModel.NextCommand.Execute(NextCommand.ADDED);
+            _resultWindowViewModel.NextCommand.Execute(NextCommand.UPDATED);
+            _resultWindowViewModel.NextCommand.Execute(NextCommand.DELETED);
+            //var savePathAdd = await _resultWriter.WriteAsync("追加.csv", result.Added);
+            //var savePathDelete = await _resultWriter.WriteAsync("削除.csv", result.Deleted);
+            //var savePathUpdate = await _resultWriter.WriteAsync("更新.csv", result.Updated);
             var diffTime = DateTime.Now - startTime;
             _viewModel.StatusText = $"比較が終了しました。経過時間:{diffTime.Minutes}分{diffTime.Seconds}秒";
-            MessageBox.Show("比較が終了しました。", "情報", MessageBoxButton.OK, MessageBoxImage.Information);
-            var targetDir = new FileInfo(savePathAdd.Value).Directory?.FullName;
-            var psi = new ProcessStartInfo();
-            psi.FileName = targetDir;
-            psi.UseShellExecute = true;
-            psi.WorkingDirectory = targetDir;
-            Process.Start(psi);
+            new ResultWindow().Show();
+            // MessageBox.Show("比較が終了しました。", "情報", MessageBoxButton.OK, MessageBoxImage.Information);
+            // var targetDir = new FileInfo(savePathAdd.Value).Directory?.FullName;
+            // var psi = new ProcessStartInfo();
+            // psi.FileName = targetDir;
+            // psi.UseShellExecute = true;
+            // psi.WorkingDirectory = targetDir;
+            // Process.Start(psi);
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex.Message);
+            _logger.LogError(ex.StackTrace ?? "Stack Trace is Empty.");
             _viewModel.StatusText = $"エラー:'{ex.Message}'";
             MessageBox.Show(ex.Message, "エラー", MessageBoxButton.OK, MessageBoxImage.Error);
         }

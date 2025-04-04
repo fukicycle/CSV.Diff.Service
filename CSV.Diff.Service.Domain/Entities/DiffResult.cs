@@ -1,20 +1,20 @@
-using System;
-
 namespace CSV.Diff.Service.Domain.Entities;
 
 public sealed class DiffResult
 {
     public DiffResult(
-        DiffResultContent added,
-        DiffResultContent deleted,
-        DiffResultContent updated)
+        string[] header,
+        IEnumerable<DiffResultContent> added,
+        IEnumerable<DiffResultContent> deleted,
+        IEnumerable<DiffResultContent> updated)
     {
+        Header = header;
         Added = added;
         Deleted = deleted;
         Updated = updated;
     }
-
-    public DiffResultContent Added { get; }
-    public DiffResultContent Deleted { get; }
-    public DiffResultContent Updated { get; }
+    public string[] Header { get; }
+    public IEnumerable<DiffResultContent> Added { get; }
+    public IEnumerable<DiffResultContent> Deleted { get; }
+    public IEnumerable<DiffResultContent> Updated { get; }
 }

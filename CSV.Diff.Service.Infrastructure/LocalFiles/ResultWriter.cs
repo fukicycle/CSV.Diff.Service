@@ -26,10 +26,10 @@ public sealed class ResultWriter : IResultWriter
             Directory.CreateDirectory(writeTargetDir);
         }
         var writeTarget = Path.Combine(writeTargetDir, targetFileName);
-        var data = content.Values.Select(a => string.Join(",", a.Keys.Select(v => v.ToCsvFormat()))).Distinct().ToList();
-        data.AddRange(content.Values.Select(a => string.Join(",", a.Values.Select(v => v.ToCsvFormat()))));
+        // var data = content.Values.Select(a => string.Join(",", a.Keys.Select(v => v.ToCsvFormat()))).Distinct().ToList();
+        // data.AddRange(content.Values.Select(a => string.Join(",", a.Values.Select(v => v.ToCsvFormat()))));
         var provider = CodePagesEncodingProvider.Instance;
-        await File.WriteAllLinesAsync(writeTarget, data, provider.GetEncoding("shift_jis") ?? Encoding.UTF8);
+        // await File.WriteAllLinesAsync(writeTarget, data, provider.GetEncoding("shift_jis") ?? Encoding.UTF8);
         _logger.LogInformation($"{targetFileName}に保存しました。");
         return new FilePath(writeTarget);
     }
