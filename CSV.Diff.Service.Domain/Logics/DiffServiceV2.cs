@@ -33,6 +33,13 @@ public sealed class DiffServiceV2 : IDiffService
                                       .Select(dict => dict.ToDictionary(kvp => kvp.Key, kvp => kvp.Value))
                                       .ToList();
 
+            var isValidPrevData = prevDict.All(prev => !string.IsNullOrEmpty(prev[baseColumn]));
+            var isValidAfterData = afterDict.All(after => !string.IsNullOrEmpty(after[baseColumn]));
+            if(!isValidPrevData || !isValidAfterData)
+            {
+                tcs.SetException(new Exception("基準となる列の値が入っていません。"));
+            }
+
             _logger.LogInformation($"追加されたデータを検索します。");
             // 追加されたデータ（prevDict に存在しない current のデータ）
             var addedData = afterDict.AsParallel()
@@ -60,16 +67,11 @@ public sealed class DiffServiceV2 : IDiffService
             _logger.LogInformation($"削除されたデータを検索しました。件数:{deletedData.Length}");
 
             _logger.LogInformation($"更新されたデータを検索します。");
-            // 変更のあるデータ（ID は同じだが値が違う）
-            // var updatedData = afterDict.AsParallel()
-            //                            .Where(current =>
-            //                                 prevDict.Any(prev => prev[baseColumn] == current[baseColumn] && !prev.EqualAllProperty(current, current[baseColumn], _logger)))
-            //                            .ToArray();
 
             var updatedData = new List<DiffResultContent>();
             prevDict.AsParallel().ForAll(prevValue => 
             {
-                var baseValue = prevValue[baseColumn] ?? throw new Exception("基準となる列の値が入っていません。");
+                var baseValue = prevValue[baseColumn];
                 var afterValue = afterDict.FirstOrDefault(after => after[baseColumn] == baseValue);
                 if (afterValue != default)
                 {

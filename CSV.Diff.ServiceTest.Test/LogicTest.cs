@@ -5,82 +5,78 @@ namespace CSV.Diff.ServiceTest.Test;
 
 public class LogicTest
 {
-    private Mock<IAppLogger> _loggerMock;
+    private Mock<IAppLogger> _mockLogger = null!;
+    private DiffServiceV2 _diffService = null!;
+
     [SetUp]
-    public void Setup()
+    public void SetUp()
     {
-        _loggerMock = new Mock<IAppLogger>();
+        _mockLogger = new Mock<IAppLogger>();
+        _diffService = new DiffServiceV2(_mockLogger.Object);
     }
+
     [Test]
-    public async Task DiffServiceTest()
+    public async Task RunAsync_ShouldIdentifyAddedDeletedAndUpdatedData()
     {
-        var diffServiceV1 = new DiffService(_loggerMock.Object);
-        var diffServiceV2 = new DiffServiceV2(_loggerMock.Object);
-        var targetColumns = new string[] { "KEY", "TEST_A", "TEST_B", "TEST_C" };
-        var key = "KEY";
-        var prevData = new List<IDictionary<string, string?>>();
-        var afterData = new List<IDictionary<string, string?>>();
+        // Arrange
+        var prevData = new List<IDictionary<string, string?>>
+            {
+                new Dictionary<string, string?> { { "id", "1" }, { "name", "Alice" }, { "age", "30" } },
+                new Dictionary<string, string?> { { "id", "2" }, { "name", "Bob" }, { "age", "40" } }
+            };
 
-        var prevOneDict = new Dictionary<string, string?>
-        {
-            { "KEY", "ABC1" },
-            { "TEST_A", "a1" },
-            { "TEST_B", "b1" },
-            { "TEST_C", "c1" },
-            { "TEST_D", "d1" }
-        };
-        var prevTwoDict = new Dictionary<string, string?>{
-            { "KEY", "ABC2" },
-            { "TEST_A", "a2" },
-            { "TEST_B", "b2" },
-            { "TEST_C", "c2" },
-            { "TEST_D", "d2" }
-        };
-        var prevThreeDict = new Dictionary<string, string?>{
-            { "KEY", "ABC3" },
-            { "TEST_A", "a3" },
-            { "TEST_B", "b3" },
-            { "TEST_C", "c3" },
-            { "TEST_D", "d3" }
-        };
-        prevData.Add(prevOneDict);
-        prevData.Add(prevTwoDict);
-        prevData.Add(prevThreeDict);
+        var afterData = new List<IDictionary<string, string?>>
+            {
+                new Dictionary<string, string?> { { "id", "2" }, { "name", "Bob" }, { "age", "41" } }, // Updated
+                new Dictionary<string, string?> { { "id", "3" }, { "name", "Charlie" }, { "age", "25" } } // Added
+            };
 
-        var afterOneDict = new Dictionary<string, string?>
-        {
-            { "KEY", "ABC1" },
-            { "TEST_A", "a1" },
-            { "TEST_B", "b1 - edit" },
-            { "TEST_C", "c1" },
-            { "TEST_D", "d1" }
-        };
-        var afterThreeDict = new Dictionary<string, string?>{
-            { "KEY", "ABC3" },
-            { "TEST_A", "a3" },
-            { "TEST_B", "b3" },
-            { "TEST_C", "c3" },
-            { "TEST_D", "d3 - edit but no tracking." }
-        };
-        var afterFourDict = new Dictionary<string, string?>{
-            { "KEY", "ABC4" },
-            { "TEST_A", "a4" },
-            { "TEST_B", "b4" },
-            { "TEST_C", "c4" },
-            { "TEST_D", "d4" }
-        };
-        afterData.Add(afterOneDict);
-        afterData.Add(afterThreeDict);
-        afterData.Add(afterFourDict);
-        
-        var result1 = await diffServiceV1.RunAsync(prevData, afterData, key, targetColumns);
-        result1.Deleted.Values.Count.Is(1);
-        result1.Added.Values.Count.Is(1);
-        result1.Updated.Values.Count.Is(1);
+        var targetColumns = new[] { "id", "name", "age" };
 
-        var result2 = await diffServiceV2.RunAsync(prevData, afterData, key, targetColumns);
-        result2.Deleted.Values.Count.Is(1);
-        result2.Added.Values.Count.Is(1);
-        result2.Updated.Values.Count.Is(1);
+        // Act
+        var result = await _diffService.RunAsync(prevData, afterData, "id", targetColumns);
+
+        // Assert with Chaining-Assertion
+        result.Added.Count().Is(1);
+        result.Added.First().BaseValue.Is("3");
+
+        result.Deleted.Count().Is(1);
+        result.Deleted.First().BaseValue.Is("1");
+
+        result.Updated.Count().Is(1);
+        result.Updated.First().BaseValue.Is("2");
+        result.Updated.First().Changes.Count().Is(1);
+
+        var change = result.Updated.First().Changes.First();
+        change.Column.Is("age");
+        change.Prev.Is("40");
+        change.After.Is("41");
+
+        // Logger の検証
+        _mockLogger.Verify(x => x.LogInformation(It.IsAny<string>()), Times.AtLeastOnce);
+        _mockLogger.Verify(x => x.LogDebug(It.Is<string>(s => s.Contains("Change!2,40,41"))), Times.Once);
+    }
+
+    [Test]
+    public void RunAsync_ShouldThrowException_WhenBaseColumnValueIsNull()
+    {
+        // Arrange
+        var prevData = new List<IDictionary<string, string?>>
+            {
+                new Dictionary<string, string?> { { "id", null }, { "name", "Alice" } }
+            };
+
+        var afterData = new List<IDictionary<string, string?>>
+            {
+                new Dictionary<string, string?> { { "id", "1" }, { "name", "Alice" } }
+            };
+
+        var targetColumns = new[] { "id", "name" };
+
+        // Act & Assert
+        var ex = Assert.ThrowsAsync<Exception>(() =>
+            _diffService.RunAsync(prevData, afterData, "id", targetColumns));
+
+        ex!.Message.Is("基準となる列の値が入っていません。");
     }
 }
