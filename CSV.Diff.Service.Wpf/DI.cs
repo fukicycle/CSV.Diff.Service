@@ -26,7 +26,6 @@ internal static class DI
             services.AddSingleton<IAppLoggerProvider, FileAppLoggerProvider>();
             services.AddSingleton<IAppLogger, FileAppLogger>();
             services.AddSingleton<IDiffService, DiffServiceV2>();
-            services.AddSingleton<ResultWindowViewModel>();
         }
         catch (Exception ex)
         {

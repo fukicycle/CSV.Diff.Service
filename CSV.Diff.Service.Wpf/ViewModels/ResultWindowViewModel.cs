@@ -15,10 +15,13 @@ public sealed class ResultWindowViewModel : ViewModel
     private CountStatusText _addStatusText = new CountStatusText(0, 0, 0);
     private CountStatusText _updateStatusText = new CountStatusText(0, 0, 0);
     private CountStatusText _deleteStatusText = new CountStatusText(0, 0, 0);
-    public ResultWindowViewModel()
+    public ResultWindowViewModel(DiffResult result)
     {
         NextCommand = new NextCommand(this);
         PrevCommand = new PrevCommand(this);
+        Added = result.Added;
+        Updated = result.Updated;
+        Deleted = result.Deleted;
     }
 
     public IEnumerable<DiffResultContent> Added

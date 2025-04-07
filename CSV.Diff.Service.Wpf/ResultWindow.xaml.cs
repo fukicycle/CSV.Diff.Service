@@ -8,9 +8,9 @@ namespace CSV.Diff.Service.Wpf;
 /// </summary>
 public partial class ResultWindow : Window
 {
-    public ResultWindow()
+    public ResultWindow(ResultWindowViewModel viewModel)
     {
         InitializeComponent();
-        DataContext = (ResultWindowViewModel)DI.Provider.GetService(typeof(ResultWindowViewModel))!;
+        DataContext = viewModel;
     }
 }

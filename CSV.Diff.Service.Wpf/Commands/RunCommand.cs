@@ -9,13 +9,11 @@ namespace CSV.Diff.Service.Wpf.Commands;
 public sealed class RunCommand : ICommand
 {
     private readonly MainWindowViewModel _viewModel;
-    private readonly ResultWindowViewModel _resultWindowViewModel;
     private readonly IDiffService _diffService;
     private readonly IAppLogger _logger;
     public RunCommand(MainWindowViewModel viewModel)
     {
         _viewModel = viewModel;
-        _resultWindowViewModel = (ResultWindowViewModel)DI.Provider.GetService(typeof(ResultWindowViewModel))!; ;
         _diffService = (IDiffService)DI.Provider.GetService(typeof(IDiffService))!;
         _viewModel.PropertyChanged += (s, e) => CanExecuteChanged?.Invoke(this, e);
         _logger = (IAppLogger)DI.Provider.GetService(typeof(IAppLogger))!;
@@ -41,16 +39,13 @@ public sealed class RunCommand : ICommand
                                 _viewModel.AfterData.Raw,
                                 _viewModel.KeyColumn,
                                 _viewModel.TargetColumnList);
-            _resultWindowViewModel.AddedRow = result.Added;
-            _resultWindowViewModel.UpdatedRow = result.Updated;
-            _resultWindowViewModel.DeletedRow = result.Deleted;
-            _resultWindowViewModel.NextCommand.Execute(NextCommand.ADDED);
-            _resultWindowViewModel.NextCommand.Execute(NextCommand.UPDATED);
-            _resultWindowViewModel.NextCommand.Execute(NextCommand.DELETED);
+            var resultWindowViewModel = new ResultWindowViewModel(result);
+            resultWindowViewModel.NextCommand.Execute(NextCommand.ADDED);
+            resultWindowViewModel.NextCommand.Execute(NextCommand.UPDATED);
+            resultWindowViewModel.NextCommand.Execute(NextCommand.DELETED);
             var diffTime = DateTime.Now - startTime;
             _viewModel.StatusText = $"比較が終了しました。経過時間:{diffTime.Minutes}分{diffTime.Seconds}秒";
-            new ResultWindow().Show();
-
+            new ResultWindow(resultWindowViewModel).Show();
         }
         catch (Exception ex)
         {
