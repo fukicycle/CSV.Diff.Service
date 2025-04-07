@@ -19,9 +19,9 @@ public sealed class ResultWindowViewModel : ViewModel
     {
         NextCommand = new NextCommand(this);
         PrevCommand = new PrevCommand(this);
-        Added = result.Added;
-        Updated = result.Updated;
-        Deleted = result.Deleted;
+        AddedRow = result.Added;
+        UpdatedRow = result.Updated;
+        DeletedRow = result.Deleted;
     }
 
     public IEnumerable<DiffResultContent> Added
