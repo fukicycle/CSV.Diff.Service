@@ -23,10 +23,8 @@ internal static class DI
             var appSettings = new AppSettings();
             services.AddSingleton(appSettings);
             services.AddSingleton<ICSVReader, CSVReader>();
-            services.AddSingleton<IResultWriter, ResultWriter>();
             services.AddSingleton<IAppLoggerProvider, FileAppLoggerProvider>();
             services.AddSingleton<IAppLogger, FileAppLogger>();
-            // services.AddSingleton<IDiffService, DiffService>();
             services.AddSingleton<IDiffService, DiffServiceV2>();
             services.AddSingleton<ResultWindowViewModel>();
         }
