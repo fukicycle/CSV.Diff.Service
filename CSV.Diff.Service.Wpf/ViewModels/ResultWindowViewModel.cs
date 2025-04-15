@@ -19,9 +19,13 @@ public sealed class ResultWindowViewModel : ViewModel
     {
         NextCommand = new NextCommand(this);
         PrevCommand = new PrevCommand(this);
+        ExportAddCommand = new ExportAddCommand(this);
+        ExportUpdateCommand = new ExportUpdateCommand(this);
+        ExportDeleteCommand = new ExportDeleteCommand(this);
         AddedRow = result.Added;
         UpdatedRow = result.Updated;
         DeletedRow = result.Deleted;
+        ResultCreationDateTime = DateTime.Now;
     }
 
     public IEnumerable<DiffResultContent> Added
@@ -112,4 +116,8 @@ public sealed class ResultWindowViewModel : ViewModel
     public IEnumerable<DiffResultContent> DeletedRow { get; set; } = Enumerable.Empty<DiffResultContent>();
     public ICommand NextCommand { get; }
     public ICommand PrevCommand { get; }
+    public ICommand ExportAddCommand { get; }
+    public ICommand ExportUpdateCommand { get; }
+    public ICommand ExportDeleteCommand { get; }
+    public DateTime ResultCreationDateTime { get; }
 }

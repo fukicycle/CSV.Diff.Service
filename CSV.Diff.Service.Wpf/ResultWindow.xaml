@@ -18,6 +18,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <DataGrid Grid.Row="0"
                               IsReadOnly="True"
@@ -27,7 +28,7 @@
                             <DataGridTextColumn Header="基準となる列の値"
                                                 Binding="{Binding BaseValue}"/>
                             <DataGridTextColumn Header="生値"
-                                                Binding="{Binding RawContent}"/>
+                                                Binding="{Binding RawContentString}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <Grid Margin="4"
@@ -36,22 +37,29 @@
                             Orientation="Horizontal"
                             HorizontalAlignment="Center">
                             <Button Content="&lt;"
+                                    Width="90"
                                     Command="{Binding PrevCommand}"
                                     CommandParameter="1"/>
                             <TextBlock Width="16"/>
                             <Button Content="&gt;"
+                                    Width="90"
                                     Command="{Binding NextCommand}"
                                     CommandParameter="1"/>
                         </StackPanel>
                         <TextBlock Text="{Binding AddStatusText.Value}"
                                    HorizontalAlignment="Right"/>
                     </Grid>
+                    <Button Grid.Row="2"
+                            Content="CSVにエクスポート"
+                            Command="{Binding ExportAddCommand}"
+                            HorizontalAlignment="Right"/>
                 </Grid>
             </TabItem>
             <TabItem Header="更新されたもの">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -69,7 +77,7 @@
                             <DataGridTextColumn Header="基準となる列の値"
                                                 Binding="{Binding BaseValue}"/>
                             <DataGridTextColumn Header="生値"
-                                                Binding="{Binding RawContent}"/>
+                                                Binding="{Binding RawContentString}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <GridSplitter Grid.Column="1"
@@ -81,10 +89,12 @@
                             Orientation="Horizontal"
                             HorizontalAlignment="Center">
                             <Button Content="&lt;"
+                                    Width="90"
                                     Command="{Binding PrevCommand}"
                                     CommandParameter="2"/>
                             <TextBlock Width="16"/>
                             <Button Content="&gt;"
+                                    Width="90"
                                     Command="{Binding NextCommand}"
                                     CommandParameter="2"/>
                         </StackPanel>
@@ -106,12 +116,18 @@
                                                 Binding="{Binding After}"/>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <Button Grid.Row="2"
+                            Grid.ColumnSpan="3"
+                            Content="CSVにエクスポート"
+                            Command="{Binding ExportUpdateCommand}"
+                            HorizontalAlignment="Right"/>
                 </Grid>
             </TabItem>
             <TabItem Header="削除されたもの">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <DataGrid Grid.Row="0"
@@ -122,7 +138,7 @@
                             <DataGridTextColumn Header="基準となる列の値"
                                                 Binding="{Binding BaseValue}"/>
                             <DataGridTextColumn Header="生値"
-                                                Binding="{Binding RawContent}"/>
+                                                Binding="{Binding RawContentString}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <Grid Margin="4"
@@ -131,16 +147,22 @@
                             Orientation="Horizontal"
                             HorizontalAlignment="Center">
                             <Button Content="&lt;"
+                                    Width="90"
                                     Command="{Binding PrevCommand}"
                                     CommandParameter="3"/>
                             <TextBlock Width="16"/>
                             <Button Content="&gt;"
+                                    Width="90"
                                     Command="{Binding NextCommand}"
                                     CommandParameter="3"/>
                         </StackPanel>
                         <TextBlock Text="{Binding DeleteStatusText.Value}"
                                    HorizontalAlignment="Right"/>
                     </Grid>
+                    <Button Grid.Row="2"
+                            Content="CSVにエクスポート"
+                            Command="{Binding ExportDeleteCommand}"
+                            HorizontalAlignment="Right"/>
                 </Grid>
             </TabItem>
         </TabControl>
