@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSV.Diff.Service.Wpf"
         xmlns:vm="clr-namespace:CSV.Diff.Service.Wpf.ViewModels"
+        Style="{StaticResource MaterialDesignWindow}"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         FontSize="17"
@@ -149,12 +150,8 @@
         <StatusBar Grid.Row="8"
                    Grid.ColumnSpan="2">
             <StatusBarItem Content="{Binding StatusText}"/>
-            <StatusBarItem HorizontalAlignment="Right">
-                <ProgressBar IsIndeterminate="{Binding IsRunning}"
-                             Height="12"
-                             HorizontalAlignment="Right"
-                             Width="240"/>
-            </StatusBarItem>
+            <StatusBarItem HorizontalAlignment="Right"
+                           Content="作成者:佐藤"/>
         </StatusBar>
         <Label Grid.Row="0"
                Grid.RowSpan="8"
